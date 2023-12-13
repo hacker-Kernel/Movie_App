@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/src/data/remote/movieRepository/movie_repository.dart';
-import 'package:movie_app/src/models/movie_response.dart';
+import 'package:movie_app/src/models/responses/movie_response.dart';
 import 'package:movie_app/src/utils/json/movies.dart';
 import 'package:movie_app/src/widget/movies/movie_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

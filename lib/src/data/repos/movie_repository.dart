@@ -1,0 +1,116 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
+import 'package:movie_app/src/models/responses/genres_response.dart';
+import 'package:movie_app/src/models/responses/movie_response.dart';
+import 'package:movie_app/src/models/responses/person_response.dart';
+
+class MovieRepository {
+  final String apiKey = "063802a0ce85006fb965ddccddda69ec";
+  static String mainUrl = "https://api.themoviedb.org/3";
+  final Dio _dio = Dio();
+  var getPopularUrl = "$mainUrl/movie/top_reted";
+  var getMoviesUrl = "$mainUrl/discover/movie";
+  var getPlayingUrl = "$mainUrl/movie/now_playing";
+  var getGenresUrl = "$mainUrl/genre/movie/list";
+  var getPersonsUrl = "$mainUrl/trending/person/week";
+
+  Future<MovieResponse> getMovies() async {
+    var parms = {
+      'apiKey': apiKey,
+      'language': 'en-US',
+      'page': 1,
+    };
+    try {
+      Response response = await _dio.get(getPopularUrl, queryParameters: parms);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return MovieResponse.fromJson(response.data);
+      } else {
+        throw Exception("Error Occured");
+      }
+    } catch (error) {
+      print("Exception Occured :: $error");
+      return MovieResponse.withError(error.toString());
+    }
+  }
+
+  Future<MovieResponse> getMoviesPlayingMovies() async {
+    var parms = {
+      'apiKey': apiKey,
+      'language': 'en-US',
+      'page': 1,
+    };
+    try {
+      Response response = await _dio.get(getPlayingUrl, queryParameters: parms);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return MovieResponse.fromJson(response.data);
+      } else {
+        throw Exception("Error Occured");
+      }
+    } catch (error) {
+      print("Exception Occured :: $error");
+      return MovieResponse.withError(error.toString());
+    }
+  }
+
+  Future<GenreResponse> getGenre() async {
+    var parms = {
+      'apiKey': apiKey,
+      'language': 'en-US',
+      'page': 1,
+    };
+    try {
+      Response response = await _dio.get(getGenresUrl, queryParameters: parms);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return GenreResponse.fromJson(response.data);
+      } else {
+        throw Exception("Error Occured");
+      }
+    } catch (error) {
+      print("Exception Occured :: $error");
+      return GenreResponse.withError(error.toString());
+    }
+  }
+
+  Future<PersonResponse> getPersons() async {
+    var parms = {
+      'apiKey': apiKey,
+    };
+    try {
+      Response response = await _dio.get(getPersonsUrl, queryParameters: parms);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return PersonResponse.fromJson(response.data);
+      } else {
+        throw Exception("Error Occured");
+      }
+    } catch (error) {
+      print("Exception Occured :: $error");
+      return PersonResponse.withError(error.toString());
+    }
+  }
+
+  Future<MovieResponse> getMoviesByGenres(int id) async {
+    var parms = {
+      'apiKey': apiKey,
+      'language': 'en-US',
+      'page': 1,
+      "with_genres": id,
+    };
+    try {
+      Response response = await _dio.get(getMoviesUrl, queryParameters: parms);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+        return MovieResponse.fromJson(response.data);
+      } else {
+        throw Exception("Error Occured");
+      }
+    } catch (error) {
+      print("Exception Occured :: $error");
+      return MovieResponse.withError(error.toString());
+    }
+  }
+}

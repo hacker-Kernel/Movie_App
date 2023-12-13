@@ -1,4 +1,4 @@
-import 'package:movie_app/src/models/movie_response.dart';
+import 'package:movie_app/src/models/responses/movie_response.dart';
 import 'package:movie_app/src/utils/json/movies.dart';
 import 'package:rxdart/subjects.dart';
 
