@@ -1,23 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:movie_app/src/data/repos/movie_repository.dart';
 import 'package:movie_app/src/models/responses/movie_response.dart';
-import 'package:movie_app/src/utils/json/movies.dart';
 import 'package:rxdart/subjects.dart';
 
 class MoviesByGenresBloc {
+  final MovieRepository _repository = MovieRepository();
   final BehaviorSubject<MovieResponse> _subject =
       BehaviorSubject<MovieResponse>();
   getMoviesByGenres(int id) async {
-    var movieDetail = AppMovies.movies;
-    for (var movie in movieDetail) {
-      MovieResponse movieResponse = MovieResponse.fromJson(movie);
-      _subject.sink.add(movieResponse);
-    }
+    MovieResponse movieResponse = await _repository.getMoviesByGenres(id);
+    _subject.sink.add(movieResponse);
   }
 
-  dispose() {
+  void drainStream() {
+    _subject.value;
+  }
+
+  @mustCallSuper
+  void dispose() async {
+    await _subject.drain();
     _subject.close();
   }
 
   BehaviorSubject<MovieResponse> get subject => _subject;
 }
 
-final subjectBloc = MoviesByGenresBloc();
+final moviesByGenresBloc = MoviesByGenresBloc();

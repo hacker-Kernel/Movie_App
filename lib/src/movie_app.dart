@@ -1,5 +1,10 @@
 // ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:movie_app/src/config/controllers/home_controller.dart';
+import 'package:movie_app/src/config/theme/theme_config.dart';
+import 'package:movie_app/src/utils/extension/navigator_extension.dart';
 import 'package:movie_app/src/utils/json/movies.dart';
 import 'package:movie_app/src/views/dashboard.dart/dashboard.dart';
 
@@ -13,6 +18,8 @@ class MovieApp extends StatefulWidget {
 }
 
 class _MovieAppState extends State<MovieApp> {
+  final HomeController _controller = Get.put(HomeController());
+
   var movieDetails = [];
 
   @override
@@ -52,8 +59,19 @@ class _MovieAppState extends State<MovieApp> {
                         radius: 36,
                       ),
                       const Spacer(),
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.dark_mode))
+                      Obx(
+                        () => Switch(
+                          value:
+                              _controller.currentTheme.value == ThemeMode.dark,
+                          onChanged: (value) {
+                            _controller.switchTheme();
+                            Get.changeThemeMode(_controller.currentTheme.value);
+                          },
+                          activeColor: CustomTheme.white,
+                        ),
+                      ),
+                      // IconButton(
+                      //     onPressed: () {}, icon: const Icon(Icons.dark_mode))
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -78,16 +96,40 @@ class _MovieAppState extends State<MovieApp> {
               onTap: () {},
             ),
             ListTile(
-              title: const Text('Hollywood'),
-              onTap: () {},
+              title: const Text('Action'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 28);
+              },
             ),
             ListTile(
-              title: const Text('bollywood'),
-              onTap: () {},
+              title: const Text('Adventure'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 12);
+              },
             ),
             ListTile(
-              title: const Text('Tollywood'),
-              onTap: () {},
+              title: const Text('Animation'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 16);
+              },
+            ),
+            ListTile(
+              title: const Text('Comedy'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 35);
+              },
+            ),
+            ListTile(
+              title: const Text('Crime'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 80);
+              },
+            ),
+            ListTile(
+              title: const Text('Fantasy'),
+              onTap: () {
+                context.navigateToMoviesByGenres(genreId: 14);
+              },
             ),
           ],
         ),
@@ -97,13 +139,16 @@ class _MovieAppState extends State<MovieApp> {
         elevation: 5,
         toolbarHeight: 96,
         shadowColor: Colors.red,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         scrolledUnderElevation: 5,
         title: Row(
           children: [
             Text(
               "Movie App",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
             ),
             const Spacer(),
             IconButton(
@@ -111,8 +156,9 @@ class _MovieAppState extends State<MovieApp> {
                 context: context,
                 delegate: CustomSearchDelegate(movieDetails),
               ),
-              icon: const Icon(
+              icon: Icon(
                 Icons.search,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
             const CircleAvatar(
@@ -128,5 +174,11 @@ class _MovieAppState extends State<MovieApp> {
         child: Dashboard(),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

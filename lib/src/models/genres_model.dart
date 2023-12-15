@@ -1,13 +1,13 @@
-class Gerne {
+class Genre {
   final int id;
   final String name;
 
-  Gerne(
+  Genre(
     this.id,
     this.name,
   );
 
-  Gerne.fromJson(Map<String, dynamic> json)
+  Genre.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         name = json["name"];
 }

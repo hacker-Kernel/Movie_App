@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -17,99 +18,89 @@ class MovieRepository {
 
   Future<MovieResponse> getMovies() async {
     var parms = {
-      'apiKey': apiKey,
-      'language': 'en-US',
+      'api_key': apiKey,
+      'language': 'en_US',
       'page': 1,
     };
     try {
-      Response response = await _dio.get(getPopularUrl, queryParameters: parms);
-      if (response.statusCode == 200) {
-        log(response.data.toString());
-        return MovieResponse.fromJson(response.data);
-      } else {
-        throw Exception("Error Occured");
-      }
+      Response response = await _dio.get(getMoviesUrl, queryParameters: parms);
+      return MovieResponse.fromJson(response.data);
     } catch (error) {
-      print("Exception Occured :: $error");
+      print("Exception Occured Get Movies :: $error");
       return MovieResponse.withError(error.toString());
     }
   }
 
-  Future<MovieResponse> getMoviesPlayingMovies() async {
+  Future<MovieResponse> getNowPlayingMovies() async {
     var parms = {
-      'apiKey': apiKey,
-      'language': 'en-US',
+      'api_key': apiKey,
+      'language': 'en_US',
       'page': 1,
     };
+
     try {
       Response response = await _dio.get(getPlayingUrl, queryParameters: parms);
       if (response.statusCode == 200) {
-        log(response.data.toString());
         return MovieResponse.fromJson(response.data);
       } else {
-        throw Exception("Error Occured");
+        throw Exception("Error");
       }
     } catch (error) {
-      print("Exception Occured :: $error");
+      print("Get Movies by gernes error :: $error");
       return MovieResponse.withError(error.toString());
     }
   }
 
   Future<GenreResponse> getGenre() async {
     var parms = {
-      'apiKey': apiKey,
+      'api_key': apiKey,
       'language': 'en-US',
       'page': 1,
     };
     try {
       Response response = await _dio.get(getGenresUrl, queryParameters: parms);
-      if (response.statusCode == 200) {
-        log(response.data.toString());
-        return GenreResponse.fromJson(response.data);
-      } else {
-        throw Exception("Error Occured");
-      }
+      log("Get Genres :: ${response.data['genres']}");
+      return GenreResponse.fromJson(response.data);
     } catch (error) {
-      print("Exception Occured :: $error");
+      print("Exception Occured Get Genres ::  $error");
       return GenreResponse.withError(error.toString());
     }
   }
 
   Future<PersonResponse> getPersons() async {
     var parms = {
-      'apiKey': apiKey,
+      'api_key': apiKey,
     };
     try {
       Response response = await _dio.get(getPersonsUrl, queryParameters: parms);
       if (response.statusCode == 200) {
-        log(response.data.toString());
         return PersonResponse.fromJson(response.data);
       } else {
-        throw Exception("Error Occured");
+        throw Exception("Error Occured Get Person :: ");
       }
     } catch (error) {
-      print("Exception Occured :: $error");
+      print("Exception Occured Get Person ::  $error");
       return PersonResponse.withError(error.toString());
     }
   }
 
   Future<MovieResponse> getMoviesByGenres(int id) async {
     var parms = {
-      'apiKey': apiKey,
+      'api_key': apiKey,
       'language': 'en-US',
       'page': 1,
       "with_genres": id,
     };
     try {
       Response response = await _dio.get(getMoviesUrl, queryParameters: parms);
+
       if (response.statusCode == 200) {
-        log(response.data.toString());
         return MovieResponse.fromJson(response.data);
       } else {
-        throw Exception("Error Occured");
+        throw Exception("Error Occured getMoviesByGenres :: ");
       }
     } catch (error) {
-      print("Exception Occured :: $error");
+      print("Exception Occured getMoviesByGenres :: $error");
       return MovieResponse.withError(error.toString());
     }
   }
